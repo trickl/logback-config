@@ -1,42 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <included>
-  <appender name="EXECUTION_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <file>${LOG_PATH}/execution.log</file>
-    <if condition='isDefined("NEW_RELIC")'>
-      <then>
-        <encoder class="com.newrelic.logging.logback.NewRelicEncoder"/>
-      </then>
-      <else>
-        <encoder>
-          <pattern>%d{HH:mm:ss.SSS} %yellow(%X{time}) %X{instructionId} %X{temporalSource} %highlight(%-5level) %cyan(%logger{15}) - %msg %n</pattern>          
-        </encoder>
-      </else>
-    </if>
 
-    <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-      <fileNamePattern>
-                ${LOG_PATH}/archived/execution_%d{dd-MM-yyyy}_%i.log
-      </fileNamePattern>
-      <maxFileSize>10MB</maxFileSize>
-      <maxHistory>10</maxHistory>
-      <totalSizeCap>100MB</totalSizeCap>
-    </rollingPolicy>
-  </appender>
-
+  <file>${LOG_PATH}/execution.log</file>
   <if condition='isDefined("NEW_RELIC")'>
     <then>
-      <appender name="NEW_RELIC_EXECUTION_FILE" class="com.newrelic.logging.logback.NewRelicAsyncAppender">
-        <appender-ref ref="EXECUTION_FILE" />
+      <appender name="EXECUTION_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder class="com.newrelic.logging.logback.NewRelicEncoder" />
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+          <fileNamePattern>
+            ${LOG_PATH}/archived/execution_%d{dd-MM-yyyy}_%i.log
+          </fileNamePattern>
+          <maxFileSize>10MB</maxFileSize>
+          <maxHistory>10</maxHistory>
+          <totalSizeCap>100MB</totalSizeCap>
+        </rollingPolicy>
       </appender>
 
-      <logger level="INFO" name="com.trickl.analytics.indicators.execution">
+      <appender name="EXECUTION_FILE"
+        class="com.newrelic.logging.logback.NewRelicAsyncAppender">
         <appender-ref ref="NEW_RELIC_EXECUTION_FILE" />
-      </logger>
+      </appender>
     </then>
-    <else>   
-      <logger level="INFO" name="com.trickl.analytics.indicators.execution">
-        <appender-ref ref="EXECUTION_FILE" />
-      </logger>
+    <else>
+      <appender name="EXECUTION_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder>
+          <pattern>%d{HH:mm:ss.SSS} %yellow(%X{time}) %X{instructionId} %X{temporalSource}
+            %highlight(%-5level) %cyan(%logger{15}) - %msg %n</pattern>
+        </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+          <fileNamePattern>
+            ${LOG_PATH}/archived/execution_%d{dd-MM-yyyy}_%i.log
+          </fileNamePattern>
+          <maxFileSize>10MB</maxFileSize>
+          <maxHistory>10</maxHistory>
+          <totalSizeCap>100MB</totalSizeCap>
+        </rollingPolicy>
+      </appender>
     </else>
   </if>
+
+  <logger level="INFO" name="com.trickl.analytics.indicators.execution">
+    <appender-ref ref="EXECUTION_FILE" />
+  </logger>
 </included>

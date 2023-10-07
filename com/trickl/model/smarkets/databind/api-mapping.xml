@@ -1,41 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <included>
-  <appender name="API_MAPPING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <file>${LOG_PATH}/api-mapping.log</file>
-    <if condition='isDefined("NEW_RELIC")'>
-      <then>
-        <encoder class="com.newrelic.logging.logback.NewRelicEncoder"/>
-      </then>
-      <else>
+  <file>${LOG_PATH}/api-mapping.log</file>
+  <if condition='isDefined("NEW_RELIC")'>
+    <then>
+      <appender name="NEW_RELIC_API_MAPPING_FILE"
+        class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder class="com.newrelic.logging.logback.NewRelicEncoder" />
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+          <fileNamePattern>
+            ${LOG_PATH}/archived/api-mapping_%d{dd-MM-yyyy}_%i.log
+          </fileNamePattern>
+          <maxFileSize>10MB</maxFileSize>
+          <maxHistory>10</maxHistory>
+          <totalSizeCap>100MB</totalSizeCap>
+        </rollingPolicy>
+      </appender>
+
+      <appender name="API_MAPPING_FILE"
+        class="com.newrelic.logging.logback.NewRelicAsyncAppender">
+        <appender-ref ref="NEW_RELIC_API_MAPPING_FILE" />
+      </appender>
+    </then>
+    <else>
+      <appender name="API_MAPPING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <encoder>
           <pattern>%d{HH:mm:ss.SSS} [%thread] %highlight(%-5level) %cyan(%logger{15}) - %msg %n</pattern>
         </encoder>
-      </else>
-    </if>
 
-    <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-      <fileNamePattern>
-                ${LOG_PATH}/archived/api-mapping_%d{dd-MM-yyyy}_%i.log
-      </fileNamePattern>
-      <maxFileSize>10MB</maxFileSize>
-      <maxHistory>10</maxHistory>
-      <totalSizeCap>100MB</totalSizeCap>
-    </rollingPolicy>
-  </appender>
-  <if condition='isDefined("NEW_RELIC")'>
-    <then>
-      <appender name="NEW_RELIC_API_MAPPING_FILE" class="com.newrelic.logging.logback.NewRelicAsyncAppender">
-        <appender-ref ref="API_MAPPING_FILE" />
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+          <fileNamePattern>
+            ${LOG_PATH}/archived/api-mapping_%d{dd-MM-yyyy}_%i.log
+          </fileNamePattern>
+          <maxFileSize>10MB</maxFileSize>
+          <maxHistory>10</maxHistory>
+          <totalSizeCap>100MB</totalSizeCap>
+        </rollingPolicy>
       </appender>
-
-      <logger level="INFO" name="com.trickl.model.smarkets.databind.EnumLogIfDefaultUsedDeserializer">
-        <appender-ref ref="NEW_RELIC_API_MAPPING_FILE" />
-      </logger>
-    </then>
-    <else>  
-      <logger level="INFO" name="com.trickl.model.smarkets.databind.EnumLogIfDefaultUsedDeserializer">
-        <appender-ref ref="API_MAPPING_FILE" />
-      </logger>
     </else>
   </if>
+
+  <logger level="INFO"
+    name="com.trickl.model.smarkets.databind.EnumLogIfDefaultUsedDeserializer">
+    <appender-ref ref="API_MAPPING_FILE" />
+  </logger>
 </included>
