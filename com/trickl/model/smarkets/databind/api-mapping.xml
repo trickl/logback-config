@@ -40,8 +40,7 @@
     </else>
   </if>
 
-  <logger level="INFO"
-    name="com.trickl.model.smarkets.databind.EnumLogIfDefaultUsedDeserializer">
+  <logger level="INFO" name="com.trickl.model.smarkets.databind.EnumLogIfDefaultUsedDeserializer">
     <appender-ref ref="API_MAPPING_FILE" />
   </logger>
 </included>
