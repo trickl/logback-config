@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <if condition='isDefined("NEW_RELIC")'>
+      <then>
+        <encoder class="com.newrelic.logging.logback.NewRelicEncoder"/>
+      </then>      
+      <else>
+        <encoder>
+          <pattern>%d{HH:mm:ss.SSS} [%thread] %highlight(%-5level) %cyan(%logger{15}) - %msg %n</pattern>
+        </encoder>
+      </else>
+    </if>
+  </appender>
+
+  <if condition='isDefined("NEW_RELIC")'>
+    <then>
+      <appender name="NEW_RELIC_STDOUT" class="com.newrelic.logging.logback.NewRelicAsyncAppender">
+        <appender-ref ref="STDOUT" />
+      </appender>
+
+      <root level="INFO">
+        <appender-ref ref="NEW_RELIC_STDOUT" />
+      </root>
+
+    </then>
+    <else>
+      <root level="INFO">
+        <appender-ref ref="STDOUT" />
+      </root>
+    </else>
+  </if>
+</configuration>
