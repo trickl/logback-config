@@ -11,7 +11,7 @@
 
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
           <fileNamePattern>
-            ${LOG_PATH}/archived/errors_%d{dd-MM-yyyy}_%i.log
+            ${LOG_PATH}/errors_%d{dd-MM-yyyy}_%i.log
           </fileNamePattern>
           <maxFileSize>10MB</maxFileSize>
           <maxHistory>10</maxHistory>
@@ -33,7 +33,7 @@
 
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
           <fileNamePattern>
-            ${LOG_PATH}/archived/errors_%d{dd-MM-yyyy}_%i.log
+            ${LOG_PATH}/errors_%d{dd-MM-yyyy}_%i.log
           </fileNamePattern>
           <maxFileSize>10MB</maxFileSize>
           <maxHistory>10</maxHistory>
