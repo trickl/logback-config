@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<included>
-  <file>${LOG_PATH}/api-mapping.log</file>
+<included>  
   <if condition='isDefined("NEW_RELIC")'>
     <then>
       <appender name="NEW_RELIC_API_MAPPING_FILE"
         class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/api-mapping.log</file>
         <encoder class="com.newrelic.logging.logback.NewRelicEncoder" />
 
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
           <fileNamePattern>
-            ${LOG_PATH}/api-mapping_%d{dd-MM-yyyy}_%i.log
+            ${LOG_PATH}/archived/api-mapping_%d{dd-MM-yyyy}_%i.log
           </fileNamePattern>
           <maxFileSize>10MB</maxFileSize>
           <maxHistory>10</maxHistory>
@@ -24,13 +24,14 @@
     </then>
     <else>
       <appender name="API_MAPPING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/api-mapping.log</file>
         <encoder>
           <pattern>%d{HH:mm:ss.SSS} [%thread] %highlight(%-5level) %cyan(%logger{15}) - %msg %n</pattern>
         </encoder>
 
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
           <fileNamePattern>
-            ${LOG_PATH}/api-mapping_%d{dd-MM-yyyy}_%i.log
+            ${LOG_PATH}/archived/api-mapping_%d{dd-MM-yyyy}_%i.log
           </fileNamePattern>
           <maxFileSize>10MB</maxFileSize>
           <maxHistory>10</maxHistory>
